@@ -29,8 +29,8 @@ const PORT = process.env.PORT || 5000;
 // connect to MongoDB
 connectDB();
 
-app.get("/", (req, res) => {
-  res.send("Welcome To Mivine Essentials Backend 🚀");
+app.get("/", (res) => {
+  res.send("Welcome To Mivine Essentials Backend");
 });
 
 // API Routes
