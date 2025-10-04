@@ -36,6 +36,7 @@ const Login = () => {
     e.preventDefault();
     dispatch(loginUser({ email, password }));
    // navigate to home page after logging in
+   navigate("/")
   };
   return (
     <div className="flex">
