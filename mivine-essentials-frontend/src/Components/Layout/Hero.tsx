@@ -69,7 +69,7 @@ const Hero = () => {
                 to="/collections/all"
                 className="bg-black mx-auto md:mx-0 text-white w-50 md:w-fit px-0 md:px-4 py-1 flex rounded-none md:rounded-2xl text-lg sm:text-sm justify-center items-center text-center md:justify-center hover:bg-black hover:text-white"
               >
-                Shop Now!
+                View Products!
               </Link>
             </p>
           </div>
