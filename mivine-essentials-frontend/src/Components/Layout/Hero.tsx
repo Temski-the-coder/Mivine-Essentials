@@ -64,7 +64,7 @@ const Hero = () => {
         <div className="absolute inset-0 bg-black/5 flex items-center justify-center pointer-events-none z-20">
           <div className="text-center text-white/85 p-6 mt-30 pointer-events-auto w-full">
 
-            <p className="flex-col md:flex sm:mb-1 mt-22 hero-text items-center justify-center text-lg gap-2 text-white w-full">
+            <p className="flex-col md:flex sm:mb-1 mt-22 hero-text items-center justify-center text-lg gap-2 text-black w-full">
               Your refined summer style awaits
               <FaLongArrowAltRight className="hidden md:visible"/>
               <Link
