@@ -69,7 +69,7 @@ const Hero = () => {
               <FaLongArrowAltRight className="hidden md:visible"/>
               <Link
                 to="/collections/all"
-                className="bg-black text-white w-full md:w-fit -px-5 md:px-4 py-1 flex rounded-none md:rounded-2xl text-lg sm:text-sm justify-center items-center text-center md:justify-center hover:bg-black hover:text-white"
+                className="bg-black text-white w-full md:w-fit -px-4 md:px-4 py-1 flex rounded-none md:rounded-2xl text-lg sm:text-sm justify-center items-center text-center md:justify-center hover:bg-black hover:text-white"
               >
                 Shop Now!
               </Link>
