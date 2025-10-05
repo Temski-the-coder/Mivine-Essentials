@@ -11,7 +11,6 @@ import women from "../../assets/women dress.gif"
 import womenFashion from "../../assets/women-fashion.jpg"
 import { Link } from "react-router-dom";
 import { FaLongArrowAltRight } from "react-icons/fa";
-import { FaArrowTurnDown } from "react-icons/fa6";
 
 const heroImages = [women, ootd, exclusive, download1, womenFashion, download2, premium1, premium3, fashion1, face1];
 
@@ -69,10 +68,10 @@ const Hero = () => {
               Your refined summer style awaits
               <FaLongArrowAltRight className="hidden md:visible"/>
               <Link
-                to="collections/:collection"
+                to="/collections/all"
                 className="bg-white text-gray-900 px-4 py-1 flex rounded-full text-lg sm:text-sm justify-center hover:bg-black hover:text-white"
               >
-                Shop the Heat <FaArrowTurnDown className="mt-1.5 visible md:hidden"/>
+                Shop the Heat
               </Link>
             </p>
           </div>
