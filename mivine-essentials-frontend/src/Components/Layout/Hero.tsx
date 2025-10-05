@@ -10,7 +10,6 @@ import exclusive from "../../assets/exclusive men's wears.jpg"
 import women from "../../assets/women dress.gif"
 import womenFashion from "../../assets/women-fashion.jpg"
 import { Link } from "react-router-dom";
-import { FaLongArrowAltRight } from "react-icons/fa";
 
 const heroImages = [women, ootd, exclusive, download1, womenFashion, download2, premium1, premium3, fashion1, face1];
 
@@ -64,12 +63,11 @@ const Hero = () => {
         <div className="absolute inset-0 bg-black/5 flex items-center justify-center pointer-events-none z-20">
           <div className="text-center text-white/85 p-6 mt-30 pointer-events-auto w-full">
 
-            <p className="flex-col md:flex sm:mb-1 mt-22 hero-text items-center justify-center text-lg gap-2 text-gray-50 w-full">
+            <p className="flex-col flex md:flex sm:mb-1 mt-22 hero-text items-center justify-center text-lg gap-2 text-gray-50 w-full">
               Your refined summer style awaits
-              <FaLongArrowAltRight className="hidden md:visible"/>
               <Link
                 to="/collections/all"
-                className="bg-black text-white w-50 md:w-fit px-0 md:px-4 py-1 flex rounded-none md:rounded-2xl text-lg sm:text-sm justify-center items-center text-center md:justify-center hover:bg-black hover:text-white"
+                className="bg-black mx-auto md:mx-0 text-white w-50 md:w-fit px-0 md:px-4 py-1 flex rounded-none md:rounded-2xl text-lg sm:text-sm justify-center items-center text-center md:justify-center hover:bg-black hover:text-white"
               >
                 Shop Now!
               </Link>
