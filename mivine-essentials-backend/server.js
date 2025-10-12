@@ -3,8 +3,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
-const userRoutes = require("./routes/userRoutes");
-const productRoutes = require("./routes/productRoutes");
+ const userRoutes = require("./routes/userRoutes");
+ const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const checkoutRoutes = require("./routes/checkoutRoutes");
 const orderRoutes = require("./routes/orderRoutes");
@@ -20,20 +20,29 @@ connectDB();
 const app = express();
 
 
+
+const allowedOrigins = [
+  "https://mivine-essentials.vercel.app",  // your frontend (production)
+  "http://localhost:5173"                  // local dev (Vite)
+];
+
 app.use(
   cors({
-    origin: [
-      "https://mivine-essentials.vercel.app",  // your frontend
-      "http://localhost:5173"                  // for local dev (Vite default)
-    ],
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow server-to-server or Postman requests
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        console.warn("Blocked by CORS:", origin);
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
   })
 );
 
-// Handle preflight requests explicitly
-app.options("*", cors());
 
 app.use(express.json());
 
@@ -43,20 +52,22 @@ app.get("/", (req, res) => {
 });
 
 // API routes
-app.use("/api/users", userRoutes);
-app.use("/api/products", productRoutes);
+ app.use("/api/users", userRoutes);
+ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/upload", uploadRoutes);
-app.use("/api", subscribeRoutes);
+app.use("/api/subscribe", subscribeRoutes);
 
 // Admin routes
 app.use("/api/admin/users", adminRoutes);
 app.use("/api/admin/products", productAdminRoutes);
 app.use("/api/admin/orders", adminOrderRoutes);
 
-//Export for Vercel serverless functions
+
+
+// //Export for Vercel serverless functions
 module.exports = app;
 
 //Start server only when running locally
