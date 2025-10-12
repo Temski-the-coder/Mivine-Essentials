@@ -61,8 +61,8 @@ router.post("/register", async (req, res) => {
 // @desc Authenticate user
 // @access Public
 router.post("/login", async (req, res) => {
+    console.log("Login request body:", req.body);
     const { email, password } = req.body;
-
     try {
         // find user by email
         let user = await User.findOne({ email });
