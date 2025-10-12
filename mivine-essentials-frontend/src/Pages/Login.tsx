@@ -6,10 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../Redux/Store";
 import { mergeCarts } from "../Redux/Slices/cartSlice";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
+import { FaRegCheckCircle } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // Password visibility
+  const [showSuccess, setShowSuccess] = useState(false); // Success animation
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
@@ -19,29 +24,29 @@ const Login = () => {
   );
   const { cart } = useSelector((state: RootState) => state.cart);
 
-  // Redirect handling
   const redirect = new URLSearchParams(location.search).get("redirect") || "/";
   const isCheckoutRedirect = redirect.includes("checkout");
 
-  // Handle auto-navigation after successful login
+  // Handle navigation after successful login
   useEffect(() => {
     if (user) {
-      if ((cart?.products?.length ?? 0) > 0 && guestId) {
-        dispatch(mergeCarts({ guestId, user: user._id })).then(() => {
+      setShowSuccess(true);
+      setTimeout(() => {
+        if ((cart?.products?.length ?? 0) > 0 && guestId) {
+          dispatch(mergeCarts({ guestId, user: user._id })).then(() => {
+            navigate(isCheckoutRedirect ? "/checkout" : "/");
+          });
+        } else {
           navigate(isCheckoutRedirect ? "/checkout" : "/");
-        });
-      } else {
-        navigate(isCheckoutRedirect ? "/checkout" : "/");
-      }
+        }
+      }, 2000); // wait 2 seconds to show success animation
     }
   }, [user, navigate, isCheckoutRedirect, cart, guestId, dispatch]);
 
-  // Auto-clear error after 3 seconds
+  // Auto-clear error after 3s
   useEffect(() => {
     if (error) {
-      const timer = setTimeout(() => {
-        dispatch(clearError());
-      }, 3000);
+      const timer = setTimeout(() => dispatch(clearError()), 3000);
       return () => clearTimeout(timer);
     }
   }, [error, dispatch]);
@@ -53,11 +58,46 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50 relative overflow-hidden">
+      {/* Success Animation Overlay */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            key="success"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-50 text-white"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1.2 }}
+              transition={{ type: "spring", stiffness: 150 }}
+              className="flex flex-col items-center"
+            >
+              <FaRegCheckCircle  className="w-20 h-20 text-green-400 mb-4" />
+              <motion.h2
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="text-2xl font-semibold"
+              >
+                Login Successful!
+              </motion.h2>
+              <p className="text-gray-300 mt-2 text-sm">
+                Redirecting to your dashboard...
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Left Form Section */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-gray-100"
+          className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-gray-100 relative z-10"
         >
           <div className="flex justify-center mb-6">
             <h1 className="text-2xl font-bold tracking-wide logo text-gray-800">
@@ -68,12 +108,11 @@ const Login = () => {
           <h2 className="text-xl text-center font-semibold text-gray-700 mb-4">
             Login to your account
           </h2>
-
           <p className="text-center text-gray-500 mb-6">
-            Enter your email and password below
+            Enter your email and password
           </p>
 
-          {/*Animated error message*/}
+          {/* Animated Error Message */}
           <AnimatePresence>
             {error && (
               <motion.div
@@ -114,25 +153,39 @@ const Login = () => {
             />
           </div>
 
-          {/* Password */}
-          <div className="mb-4">
+          {/* Password with toggle */}
+          <div className="mb-4 relative">
             <label
               htmlFor="password"
               className="block text-sm font-semibold mb-1"
             >
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="border border-gray-300 p-2 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-              placeholder="Enter your password"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="border border-gray-300 p-2 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition pr-10"
+                placeholder="Enter your password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? (
+                  <FaRegEyeSlash size={20} strokeWidth={1.5} />
+                ) : (
+                  <FaRegEye size={20} strokeWidth={1.5} />
+                )}
+              </button>
+            </div>
           </div>
 
+          {/* Login Button */}
           <button
             type="submit"
             disabled={loading}
@@ -157,6 +210,7 @@ const Login = () => {
         </form>
       </div>
 
+      {/* Right Image Section */}
       <div className="hidden md:block w-1/2 bg-gray-100">
         <img
           src={login}
